@@ -20,14 +20,14 @@
 % \course{Bachelor thesis}
 % \assignmenttype{Research proposal}
 
-\academicyear{2022-2023} % TODO: pas het academiejaar aan
+\academicyear{2024-2025}
 
 % TODO: Werktitel
-\title{Vul hier de voorgestelde titel van je onderzoek in}
+\title{Productherkenning in afbeeldingen met behulp van neurale netwerken}
 
 % TODO: Studentnaam en emailadres invullen
-\author{Ernst Aarden}
-\email{ernst.aarden@student.hogent.be}
+\author{Xillian Van Heck}
+\email{xillian.vanheck@student.hogent.be}
 
 % TODO: Medestudent
 % Gaat het om een bachelorproef in samenwerking met een student in een andere
@@ -36,7 +36,7 @@
 % \email{yasmine.alaoui@student.hogent.be}
 
 % TODO: Geef de co-promotor op
-\supervisor[Co-promotor]{S. Beekman (Synalco, \href{mailto:sigrid.beekman@synalco.be}{sigrid.beekman@synalco.be})}
+\supervisor[Co-promotor]{B. Vanherle (Colruyt Group, \href{mailto:bram.vanherle@colruytgroup.be}{bram.vanherle@colruytgroup.be})}
 
 % Binnen welke specialisatierichting uit 3TI situeert dit onderzoek zich?
 % Kies uit deze lijst:
@@ -49,13 +49,20 @@
 % - Als het onderzoek niet past binnen een van deze domeinen specifieer je deze
 %   zelf
 %
-\specialisation{Mobile \& Enterprise development}
-\keywords{Scheme, World Wide Web, $\lambda$-calculus}
+\specialisation{AI \& Data Engineering}
+\keywords{AI, Productherkenning, Yolo$\lambda$-calculus}
 
 \begin{document}
 
 \begin{abstract}
-  Hier schrijf je de samenvatting van je voorstel, als een doorlopende tekst van één paragraaf. Let op: dit is geen inleiding, maar een samenvattende tekst van heel je voorstel met inleiding (voorstelling, kaderen thema), probleemstelling en centrale onderzoeksvraag, onderzoeksdoelstelling (wat zie je als het concrete resultaat van je bachelorproef?), voorgestelde methodologie, verwachte resultaten en meerwaarde van dit onderzoek (wat heeft de doelgroep aan het resultaat?).
+  Binnen de Colruyt Group wordt er gewerkt aan een easy Self Check-out systeem dat via camera’s aan de kassa automatisch detecteert welke producten er in de winkelkar van de klant bevinden.
+  Momenteel is er al een bestaand YOLO-model dat producten kan herkennen maar ondervindt moeilijkheden bij het onderscheiden van visueel sterk gelijkende artikelen.
+  Om het huidige YOLO-model te verbeteren wordt er in dit onderzoek gewerkt aan een aanvullend YOLO-model dat de producttitels op verpakkingen herkent.
+  Dit moet helpen bij het onderscheiden van sterk gerelateerde productverpakkingen. Binnen de dienst van Smart Innovations van Colruyt, die werken aan het Self Check-out systeem, 
+  hebben ze een setup gebouwd met camera’s en een draaitafel om afbeeldingen te verzamelen van de producten uit verschillende hoeken. 
+  Deze beelden worden vervolgens gelabeld met locaties van de producttitels op de afbeeldingen, die dan gebruikt worden om het model te trainen. 
+  De verwachte resultaten zijn een betere productherkenningen op productverpakkingen die sterk gerelateerd zijn aan elkaar wat bijdraagt aan een snellere en nauwkeurige winkelervaring. 
+  Dit onderzoek levert een significante meerwaarde voor de Colruyt Group door de efficiëntie en betrouwbaarheid van hun kassasysteem te verhogen, wat uiteindelijk de klanttevredenheid ten goede komt.
 \end{abstract}
 
 \tableofcontents

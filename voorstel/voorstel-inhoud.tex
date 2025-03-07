@@ -1,51 +1,86 @@
 %---------- Inleiding ---------------------------------------------------------
-
-% TODO: Is dit voorstel gebaseerd op een paper van Research Methods die je
-% vorig jaar hebt ingediend? Heb je daarbij eventueel samengewerkt met een
-% andere student?
-% Zo ja, haal dan de tekst hieronder uit commentaar en pas aan.
-
-%\paragraph{Opmerking}
-
-% Dit voorstel is gebaseerd op het onderzoeksvoorstel dat werd geschreven in het
-% kader van het vak Research Methods dat ik (vorig/dit) academiejaar heb
-% uitgewerkt (met medesturent VOORNAAM NAAM als mede-auteur).
-% 
-
 \section{Inleiding}%
 \label{sec:inleiding}
 
-Waarover zal je bachelorproef gaan? Introduceer het thema en zorg dat volgende zaken zeker duidelijk aanwezig zijn:
+Binnen de Colruyt Group wordt er binnen de afdeling Smart Innovations gewerkt aan technologieën om het winkelproces efficiënter en klantvriendelijker te maken. Een van deze innovaties is het \textit{easy Self Check-out systeem}, dat gebruik maakt van camera’s aan de kassa om automatisch te detecteren welke producten er in de winkelkar liggen. Dit systeem maakt gebruik van een YOLO-gebaseerd objectdetectiemodel om producten te herkennen, maar ondervindt momenteel moeilijkheden bij het onderscheiden van sterk gerelateerde producten, vooral producten met gelijkaardige verpakkingen.
 
-\begin{itemize}
-  \item kaderen thema
-  \item de doelgroep
-  \item de probleemstelling en (centrale) onderzoeksvraag
-  \item de onderzoeksdoelstelling
-\end{itemize}
+Om dit probleem aan te pakken, richt dit onderzoek zich op het trainen van een aanvullend YOLO-model dat producttitels op verpakkingen kan herkennen, op basis van afbeeldingen van de producten. Door de titels op de verpakking van producten te herkennen, kan het model producten beter onderscheiden en de nauwkeurigheid van het Check-out systeem verbeteren. Binnen de afdeling Smart Innovations van Colruyt is een fotobooth gebouwd met meerdere camera’s en een draaitafel om afbeeldingen van producten uit verschillende hoeken vast te leggen. Deze beelden worden vervolgens gelabeld met de locaties van titels op de verpakkingen.
 
-Denk er aan: een typische bachelorproef is \textit{toegepast onderzoek}, wat betekent dat je start vanuit een concrete probleemsituatie in bedrijfscontext, een \textbf{casus}. Het is belangrijk om je onderwerp goed af te bakenen: je gaat voor die \textit{ene specifieke probleemsituatie} op zoek naar een goede oplossing, op basis van de huidige kennis in het vakgebied.
+\subsection*{Onderzoeksvraag}
+De centrale onderzoeksvraag luidt:
 
-De doelgroep moet ook concreet en duidelijk zijn, dus geen algemene of vaag gedefinieerde groepen zoals \emph{bedrijven}, \emph{developers}, \emph{Vlamingen}, enz. Je richt je in elk geval op it-professionals, een bachelorproef is geen populariserende tekst. Eén specifiek bedrijf (die te maken hebben met een concrete probleemsituatie) is dus beter dan \emph{bedrijven} in het algemeen.
+\begin{center}
+    \textit{Hoe kan een YOLO-model voor producttitelherkenning de nauwkeurigheid van productdetectie binnen het Self Check-out systeem van Colruyt verbeteren?}
+\end{center}
 
-Formuleer duidelijk de onderzoeksvraag! De begeleiders lezen nog steeds te veel voorstellen waarin we geen onderzoeksvraag terugvinden.
-
-Schrijf ook iets over de doelstelling. Wat zie je als het concrete eindresultaat van je onderzoek, naast de uitgeschreven scriptie? Is het een proof-of-concept, een rapport met aanbevelingen, \ldots Met welk eindresultaat kan je je bachelorproef als een succes beschouwen?
+\subsection*{Onderzoeksdoelstelling}
+De onderzoeksdoelstelling is het creëren van een model dat producttitels accuraat kan detecteren en dat getest wordt op verschillende producten. Het eindresultaat omvat niet alleen een getraind model, maar ook een analyse van de prestaties, inclusief validatietesten. Dit onderzoek biedt een meerwaarde voor Colruyt, omdat het de efficiëntie en betrouwbaarheid van het Self Check-out systeem verhoogt. Hierdoor kunnen zowel klanten als medewerkers van de winkels profiteren van een snellere en betere werking van het Check-out systeem.
 
 %---------- Stand van zaken ---------------------------------------------------
 
 \section{Literatuurstudie}%
 \label{sec:literatuurstudie}
 
-Hier beschrijf je de \emph{state-of-the-art} rondom je gekozen onderzoeksdomein, d.w.z.\ een inleidende, doorlopende tekst over het onderzoeksdomein van je bachelorproef. Je steunt daarbij heel sterk op de professionele \emph{vakliteratuur}, en niet zozeer op populariserende teksten voor een breed publiek. Wat is de huidige stand van zaken in dit domein, en wat zijn nog eventuele open vragen (die misschien de aanleiding waren tot je onderzoeksvraag!)?
+\subsection{Objectdetectie en Neurale Netwerken}
 
-Je mag de titel van deze sectie ook aanpassen (literatuurstudie, stand van zaken, enz.). Zijn er al gelijkaardige onderzoeken gevoerd? Wat concluderen ze? Wat is het verschil met jouw onderzoek?
+\subsubsection{Wat is objectdetectie en hoe werkt het?}
+Objectdetectie is een combinatie van objectclassificatie en lokalisatie. Deze techniek lokaliseert objecten binnen een afbeelding en voert per bounding box een classificatie uit. Bij het lokaliseren van de objecten wordt er binnen de afbeelding een rechthoek of bounding box rond een object getekend. Deze bounding boxen worden vervolgens geclassificeerd.
 
-Verwijs bij elke introductie van een term of bewering over het domein naar de vakliteratuur, bijvoorbeeld~\autocite{Hykes2013}! Denk zeker goed na welke werken je refereert en waarom.
+In de context van dit onderzoek betekent dit dat de titels die op de afbeelding te zien zijn, moeten worden gelokaliseerd en vervolgens moeten worden geclassificeerd als een product \autocite{wulteputteefficient}.
 
-Draag zorg voor correcte literatuurverwijzingen! Een bronvermelding hoort thuis \emph{binnen} de zin waar je je op die bron baseert, dus niet er buiten! Maak meteen een verwijzing als je gebruik maakt van een bron. Doe dit dus \emph{niet} aan het einde van een lange paragraaf. Baseer nooit teveel aansluitende tekst op eenzelfde bron.
+\subsubsection{Uitleg over Convolutional Neural Networks (CNNs) en hun rol in objectdetectie}
+Convolutional Neural Networks (CNNs) zijn speciaal ontworpen om efficiënt om te gaan met meerdimensionale invoer, zoals afbeeldingen, door gebruik te maken van een techniek die convolutie wordt genoemd. In tegenstelling tot klassieke neurale netwerken, die werken met eendimensionale vectoren, zijn CNN's in staat om belangrijke informatie uit aanliggende pixels te halen, waardoor ze veel effectiever zijn voor taken zoals objectdetectie.
 
-Als je informatie over bronnen verzamelt in JabRef, zorg er dan voor dat alle nodige info aanwezig is om de bron terug te vinden (zoals uitvoerig besproken in de lessen Research Methods).
+Een CNN bestaat uit verschillende lagen, waarvan de belangrijkste de convolutionele lagen zijn. In deze lagen wordt een set filters (of kernels) over de afbeelding geschoven. Elke filter leert specifieke kenmerken van de afbeelding, zoals randen of kleurovergangen. Door deze filters toe te passen op verschillende delen van de afbeelding ontstaat er een feature map \autocite{wulteputteefficient}. 
+
+Als je bijvoorbeeld een foto van een hond hebt, zal het CNN eerst kleine basiselementen leren, zoals randen en hoeken. Later in het netwerk worden die basiskenmerken samengevoegd tot grotere objectkenmerken, zoals de oren, ogen en poten van de hond. Dit maakt de CNN krachtig voor beeldherkenning.
+
+\subsubsection{Verschillende objectdetectiemethoden}
+\begin{itemize}
+    \item \textbf{RCNN (Region-based Convolutional Neural Networks)}: Verdeelt een afbeelding in meerdere regio’s en gebruikt een CNN om elk van deze regio’s te classificeren.
+    \item \textbf{Fast RCNN}: Een verbeterde versie van RCNN waarbij de afbeelding eerst door een CNN wordt gehaald om feature maps te verkrijgen, waaruit regio’s worden gehaald en geclassificeerd.
+    \item \textbf{Faster RCNN}: Maakt gebruik van een Region Proposal Network (RPN) om regio’s automatisch voor te stellen.
+    \item \textbf{SSD (Single Shot Multibox Detector)}: Verdeelt de afbeeldingen in meerdere cellen en voorspelt gelijktijdig objecten en hun locaties in één enkele stap.
+    \item \textbf{YOLO (You Only Look Once)}: Verdeelt de afbeeldingen in een raster en voorspelt objecten en hun locaties in dezelfde stap.
+\end{itemize}
+
+\subsubsection{Waarom is YOLO geschikt voor real-time productdetectie?}
+YOLO is geschikt voor real-time productdetectie omdat het alles in één keer doet. Het verdeelt de afbeelding in een raster en voorspelt gelijktijdig alle objecten en hun locaties in één doorlopende stap, zonder dat het meerdere keren door de afbeelding hoeft te bewegen. Dit maakt het zeer snel en in staat om beelden in real-time te verwerken, wat essentieel is voor toepassingen waar snelheid cruciaal is.
+
+\subsection{Productherkenning in Retail}
+\begin{itemize}
+    \item Hoe wordt objectdetectie in de retailsector toegepast?
+    \item Uitdagingen bij productherkenning in supermarkten (bv. overlappende objecten, gelijkaardige verpakkingen).
+    \item Vergelijking met andere technieken zoals RFID, barcode-scanning en OCR (Optical Character Recognition).
+\end{itemize}
+
+\subsection{Producttitelherkenning met AI}
+\begin{itemize}
+    \item Wat is tekstdetectie en -herkenning (OCR) en hoe verschilt het van objectdetectie?
+    \item Verschil tussen OCR-gebaseerde technieken (zoals Tesseract) en AI-modellen zoals YOLO voor tekstherkenning.
+    \item Uitdagingen bij tekstherkenning op verpakkingen (bijv. schuine hoeken, slechte belichting, reflectie).
+\end{itemize}
+
+\subsection{Dataverzameling en Annotatie voor AI-Modellen}
+\begin{itemize}
+    \item Het belang van een kwalitatieve dataset voor YOLO-training.
+    \item Hoe werkt data-annotatie (bounding boxes, labels, tools zoals LabelImg of Roboflow)?
+    \item Hoe de fotobooth en draaitafel helpen bij het verzamelen van consistente data.
+\end{itemize}
+
+\subsection{Evaluatie en Validatie van Objectdetectiemodellen}
+\begin{itemize}
+    \item Welke metriek(en) gebruik je om je YOLO-model te evalueren? (bv. mAP (mean Average Precision), recall, precision, IoU (Intersection over Union)).
+    \item Hoe test je je model op real-world data en zorg je voor een betrouwbare validatie?
+\end{itemize}
+
+\subsection{Vergelijking met Alternatieve Oplossingen}
+\begin{itemize}
+    \item Zijn er andere deep learning-modellen die beter geschikt zouden kunnen zijn?
+    \item Kunnen hybride technieken (bv. combinatie van OCR en YOLO) de nauwkeurigheid verbeteren?
+    \item Hoe verhoudt jouw aanpak zich tot bestaande state-of-the-art oplossingen in de industrie?
+\end{itemize}
+
 
 % Voor literatuurverwijzingen zijn er twee belangrijke commando's:
 % \autocite{KEY} => (Auteur, jaartal) Gebruik dit als de naam van de auteur
@@ -60,25 +95,47 @@ Je mag deze sectie nog verder onderverdelen in subsecties als dit de structuur v
 \section{Methodologie}%
 \label{sec:methodologie}
 
-Hier beschrijf je hoe je van plan bent het onderzoek te voeren. Welke onderzoekstechniek ga je toepassen om elk van je onderzoeksvragen te beantwoorden? Gebruik je hiervoor literatuurstudie, interviews met belanghebbenden (bv.~voor requirements-analyse), experimenten, simulaties, vergelijkende studie, risico-analyse, PoC, \ldots?
+Dit onderzoek volgt een experimentele aanpak waarbij een YOLO-model wordt getraind en geëvalueerd voor producttitelherkenning. De methodologie bestaat uit de volgende fasen:
 
-Valt je onderwerp onder één van de typische soorten bachelorproeven die besproken zijn in de lessen Research Methods (bv.\ vergelijkende studie of risico-analyse)? Zorg er dan ook voor dat we duidelijk de verschillende stappen terug vinden die we verwachten in dit soort onderzoek!
+\subsection{Dataverzameling}
+Voor de training van het model wordt een dataset samengesteld met behulp van de fotobooth van Colruyt. De fotobooth maakt het mogelijk om producten vanuit verschillende hoeken vast te leggen, wat zorgt voor een diverse dataset. De verzamelde afbeeldingen worden gelabeld met bounding boxes rond de producttitels.
 
-Vermijd onderzoekstechnieken die geen objectieve, meetbare resultaten kunnen opleveren. Enquêtes, bijvoorbeeld, zijn voor een bachelorproef informatica meestal \textbf{niet geschikt}. De antwoorden zijn eerder meningen dan feiten en in de praktijk blijkt het ook bijzonder moeilijk om voldoende respondenten te vinden. Studenten die een enquête willen voeren, hebben meestal ook geen goede definitie van de populatie, waardoor ook niet kan aangetoond worden dat eventuele resultaten representatief zijn.
+\subsection{Modeltraining}
+Het YOLO-model wordt getraind met de geannoteerde dataset. Hiervoor wordt gebruik gemaakt van de volgende aanpak:
+\begin{itemize}
+    \item Pre-processing van afbeeldingen (resolutie-aanpassing, normalisatie);
+    \item Data augmentatie om de robuustheid van het model te verhogen;
+    \item Training van het YOLO-model met behulp van deep learning frameworks zoals TensorFlow of PyTorch;
+    \item Hyperparameter-tuning voor optimale prestaties.
+\end{itemize}
 
-Uit dit onderdeel moet duidelijk naar voor komen dat je bachelorproef ook technisch voldoen\-de diepgang zal bevatten. Het zou niet kloppen als een bachelorproef informatica ook door bv.\ een student marketing zou kunnen uitgevoerd worden.
+\subsection{Evaluatie en Validatie}
+Het model wordt geëvalueerd met behulp van verschillende prestatie-indicatoren:
+\begin{itemize}
+    \item \textbf{mAP (mean Average Precision)}: meet de gemiddelde precisie van het model over verschillende objectcategorieën.
+    \item \textbf{Recall en Precision}: bepalen hoe goed het model relevante objecten detecteert en incorrecte detecties minimaliseert.
+    \item \textbf{IoU (Intersection over Union)}: meet de overlap tussen de voorspelde en werkelijke bounding boxes.
+\end{itemize}
+Daarnaast wordt het model getest op real-world data om de prestaties in praktijksituaties te valideren.
 
-Je beschrijft ook al welke tools (hardware, software, diensten, \ldots) je denkt hiervoor te gebruiken of te ontwikkelen.
-
-Probeer ook een tijdschatting te maken. Hoe lang zal je met elke fase van je onderzoek bezig zijn en wat zijn de concrete \emph{deliverables} in elke fase?
-
+\subsection{Vergelijking met Alternatieve Methodes}
+Een vergelijking wordt uitgevoerd tussen het YOLO-model en alternatieve technieken zoals OCR-gebaseerde detectie (bijvoorbeeld Tesseract). Hierbij wordt gekeken naar:
+\begin{itemize}
+    \item Snelheid van detectie;
+    \item Nauwkeurigheid in verschillende lichtomstandigheden en hoeken;
+    \item Robuustheid tegen variaties in verpakkingsontwerpen.
+\end{itemize}
 %---------- Verwachte resultaten ----------------------------------------------
 \section{Verwacht resultaat, conclusie}%
 \label{sec:verwachte_resultaten}
 
-Hier beschrijf je welke resultaten je verwacht. Als je metingen en simulaties uitvoert, kan je hier al mock-ups maken van de grafieken samen met de verwachte conclusies. Benoem zeker al je assen en de onderdelen van de grafiek die je gaat gebruiken. Dit zorgt ervoor dat je concreet weet welk soort data je moet verzamelen en hoe je die moet meten.
+Op basis van eerdere studies en verwachte modelprestaties worden de volgende resultaten verwacht:
+\begin{itemize}
+    \item Het YOLO-model zal in staat zijn om producttitels op verpakkingen nauwkeurig te detecteren en te onderscheiden van andere elementen op de verpakking.
+    \item De implementatie van het model binnen het Self Check-out systeem zal leiden tot een verbeterde productherkenning, vooral bij sterk gelijkende producten.
+    \item De combinatie van objectdetectie en tekstdetectie zal zorgen voor een robuuster systeem dat beter bestand is tegen uitdagende winkelomstandigheden, zoals overlappende objecten en slechte belichting.
+    \item Vergelijking met OCR-gebaseerde methodes zal aantonen dat YOLO een snellere en mogelijk nauwkeurigere methode is voor real-time producttitelherkenning.
+\end{itemize}
 
-Wat heeft de doelgroep van je onderzoek aan het resultaat? Op welke manier zorgt jouw bachelorproef voor een meerwaarde?
-
-Hier beschrijf je wat je verwacht uit je onderzoek, met de motivatie waarom. Het is \textbf{niet} erg indien uit je onderzoek andere resultaten en conclusies vloeien dan dat je hier beschrijft: het is dan juist interessant om te onderzoeken waarom jouw hypothesen niet overeenkomen met de resultaten.
-
+\subsection{Conclusie}
+Dit onderzoek richt zich op het verbeteren van productdetectie binnen het Self Check-out systeem van Colruyt door een YOLO-model te trainen voor producttitelherkenning. Door het gebruik van deep learning en een hoogwaardige dataset verzameld via de fotobooth, wordt verwacht dat het model een significante bijdrage levert aan de nauwkeurigheid van het systeem. Dit kan resulteren in een snellere en efficiëntere check-out ervaring voor klanten en medewerkers. Verdere optimalisatie en validatie met real-world tests zullen uitwijzen hoe goed het model presteert in praktijksituaties.

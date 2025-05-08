@@ -2,10 +2,10 @@
 \section{Inleiding}%
 \label{sec:inleiding}
 
-Binnen de Colruyt Group wordt er binnen de afdeling Smart Innovations gewerkt aan technologieën om het winkelproces efficiënter en klantvriendelijker te maken. Een van deze innovaties is het \textit{easy Self Check-out systeem}, dat gebruik maakt van camera’s aan de kassa om automatisch te detecteren welke producten er in de winkelkar liggen. Dit systeem maakt gebruik van een YOLO-gebaseerd objectdetectiemodel om producten te herkennen, maar ondervindt momenteel moeilijkheden bij het onderscheiden van sterk gerelateerde producten, vooral producten met gelijkaardige verpakkingen.
-
-Om dit probleem aan te pakken, richt dit onderzoek zich op het trainen van een aanvullend YOLO-model dat producttitels op verpakkingen kan herkennen, op basis van afbeeldingen van de producten. Door de titels op de verpakking van producten te herkennen, kan het model producten beter onderscheiden en de nauwkeurigheid van het Check-out systeem verbeteren. Binnen de afdeling Smart Innovations van Colruyt is een fotobooth gebouwd met meerdere camera’s en een draaitafel om afbeeldingen van producten uit verschillende hoeken vast te leggen. Deze beelden worden vervolgens gelabeld met de locaties van titels op de verpakkingen.
-
+Binnen de Colruyt Group wordt er binnen de afdeling Smart Innovations gewerkt aan technologieën om het winkelproces efficiënter en klantvriendelijker te maken. Een van deze innovaties is het easy Self Check-out systeem, dat gebruik maakt van camera’s aan de kassa om automatisch te detecteren welke producten zich in de winkelkar bevinden. Dit systeem maakt gebruik van een YOLO-gebaseerd objectdetectiemodel om producten te herkennen, maar ondervindt momenteel moeilijkheden bij het onderscheiden van sterk gerelateerde producten, vooral producten met gelijkaardige verpakkingen.
+Om dit probleem aan te pakken, richt dit onderzoek zich op het trainen van een aanvullend YOLO-model dat producttitels op verpakkingen kan herkennen op basis van afbeeldingen van de producten. Door de titels op de verpakking van producten te herkennen, kan het model producten beter onderscheiden en de nauwkeurigheid van het check-out systeem verbeteren. Daarom is het doel van dit project om een detectiemodel te ontwikkelen dat specifiek gefocust is op het lokaliseren van producttitels als visuele referentiepunten.
+Binnen de afdeling Smart Innovations van Colruyt is een fotobooth gebouwd met meerdere camera’s en een draaitafel om afbeeldingen van producten uit verschillende hoeken vast te leggen. Deze setup zorgt voor consistente en veelzijdige beelddata, cruciaal voor een robuust deep learning model. De verzamelde data wordt gelabeld op basis van zichtbare producttitels en vervolgens gebruikt om YOLO-modellen te trainen en te vergelijken.
+Ten slotte wordt onderzocht hoe de gedetecteerde titels met OCR kunnen worden gelezen, zodat het systeem niet alleen de locatie, maar ook de inhoud van de titel kan gebruiken voor classificatie.
 \subsection*{Onderzoeksvraag}
 De centrale onderzoeksvraag luidt:
 
@@ -48,37 +48,49 @@ Als je bijvoorbeeld een foto van een hond hebt, zal het CNN eerst kleine basisel
 YOLO is geschikt voor real-time productdetectie omdat het alles in één keer doet. Het verdeelt de afbeelding in een raster en voorspelt gelijktijdig alle objecten en hun locaties in één doorlopende stap, zonder dat het meerdere keren door de afbeelding hoeft te bewegen. Dit maakt het zeer snel en in staat om beelden in real-time te verwerken, wat essentieel is voor toepassingen waar snelheid cruciaal is.
 
 \subsection{Productherkenning in Retail}
-\begin{itemize}
-    \item Hoe wordt objectdetectie in de retailsector toegepast?
-    \item Uitdagingen bij productherkenning in supermarkten (bv. overlappende objecten, gelijkaardige verpakkingen).
-    \item Vergelijking met andere technieken zoals RFID, barcode-scanning en OCR (Optical Character Recognition).
-\end{itemize}
+Objectdetectie speelt een steeds grotere rol in de automatisering van retailprocessen. Het wordt ingezet voor voorraadbeheer, real-time productherkenning en navigatie binnen winkels of magazijnen \autocite{Cai2021}. Toch zijn er grote uitdagingen verbonden aan productherkenning in supermarkten. Een belangrijke uitdaging is het onderscheid maken tussen producten met gelijkaardige verpakkingen of overlappende producten in een winkelkar. Daarnaast spelen ook belichting, reflectie en bewegingsonscherpte een rol in het verlagen van de nauwkeurigheid \autocite{Cai2021}.
+
+In vergelijking met technieken zoals RFID of barcode-scanning biedt visuele objectdetectie een voordeel omdat het werkt zonder fysiek contact en ook inzetbaar is wanneer labels onzichtbaar of beschadigd zijn. Visuele detectie maakt bovendien gebruik van context, wat barcode- of RFID-systemen niet doen \autocite{Desmarescaux2025}.
 
 \subsection{Producttitelherkenning met AI}
-\begin{itemize}
-    \item Wat is tekstdetectie en -herkenning (OCR) en hoe verschilt het van objectdetectie?
-    \item Verschil tussen OCR-gebaseerde technieken (zoals Tesseract) en AI-modellen zoals YOLO voor tekstherkenning.
-    \item Uitdagingen bij tekstherkenning op verpakkingen (bijv. schuine hoeken, slechte belichting, reflectie).
-\end{itemize}
+Bij het herkennen van producttitels is er een onderscheid tussen objectdetectie en optische tekenherkenning (OCR). OCR-technologieën, zoals Tesseract, zijn gericht op het herkennen van tekst in beelden, maar zijn gevoelig voor schuine hoeken, slechte belichting of reflecties. Objectdetectiemodellen zoals YOLO kunnen teksten detecteren als objecten, zelfs wanneer de tekst moeilijk leesbaar is, en vormen zo een betere basis voor OCR-verwerking \autocite{Desmarescaux2025}.
+
+Een bijkomend probleem in tekstherkenning op verpakkingen is de inconsistentie in lettertype, grootte, kleur en oriëntatie. \textcite{Desmarescaux2025} bieden hier een oplossing door modellen toe te laten om nieuwe teksten of producten te herkennen aan de hand van slechts één voorbeeld per klasse. Dit vermindert de behoefte aan grote, gelabelde datasets en laat toe om flexibeler te reageren op veranderende verpakkingen.
 
 \subsection{Dataverzameling en Annotatie voor AI-Modellen}
+Een cruciale factor voor het succes van deep learning-modellen zoals YOLO is de kwaliteit van de gebruikte trainingsdata. Volgens \textcite{Bertossi2020} kan de kwaliteit van data rechtstreeks worden gelinkt aan de resultaten en betrouwbaarheid van AI-modellen. Wanneer een model fouten maakt, is dit vaak te herleiden tot het gebrek, inconsistentie en de kwaliteit van de data.
+
 \begin{itemize}
-    \item Het belang van een kwalitatieve dataset voor YOLO-training.
-    \item Hoe werkt data-annotatie (bounding boxes, labels, tools zoals LabelImg of Roboflow)?
-    \item Hoe de fotobooth en draaitafel helpen bij het verzamelen van consistente data.
+    \item \textbf{Het belang van een kwalitatieve dataset voor YOLO-training.} \\
+    YOLO (You Only Look Once) is een objectdetectiemodel dat sterk afhankelijk is van nauwkeurige bounding boxes. Fouten in de annotatie hebben invloed op de prestaties van het model en zorgen voor een mindere nauwkeurigheid. Dit benadrukt dat een model sterk afhankelijk is van de kwaliteit van de data, en dat fouten in de data een invloed hebben op de nauwkeurigheid van een YOLO-model \autocite{Bertossi2020}.
+
+    \item \textbf{Hoe werkt data-annotatie (bounding boxes, labels, tools zoals LabelImg of Roboflow)?} \\
+    Annotatie is het proces waarbij objecten in afbeeldingen worden aangeduid, in dit geval het aanduiden van de producttitels op afbeeldingen. De aangeduide titels noemen we masks, en deze masks worden later omgezet naar een bounding box. Bounding boxes worden gebruikt in YOLO-modellen en zijn de labels in het trainingsproces. 
+
+    \item \textbf{Hoe de fotobooth en draaitafel helpen bij het verzamelen van consistente data.} \\
+    Bij Colruyt Group is een fotobooth ontwikkeld die afbeeldingen genereert van een product uit verschillende standpunten. Dit zorgt ervoor dat er een consistente dataset wordt opgebouwd met minimale variatie en constante belichting. 
 \end{itemize}
+
 
 \subsection{Evaluatie en Validatie van Objectdetectiemodellen}
-\begin{itemize}
-    \item Welke metriek(en) gebruik je om je YOLO-model te evalueren? (bv. mAP (mean Average Precision), recall, precision, IoU (Intersection over Union)).
-    \item Hoe test je je model op real-world data en zorg je voor een betrouwbare validatie?
-\end{itemize}
 
-\subsection{Vergelijking met Alternatieve Oplossingen}
 \begin{itemize}
-    \item Zijn er andere deep learning-modellen die beter geschikt zouden kunnen zijn?
-    \item Kunnen hybride technieken (bv. combinatie van OCR en YOLO) de nauwkeurigheid verbeteren?
-    \item Hoe verhoudt jouw aanpak zich tot bestaande state-of-the-art oplossingen in de industrie?
+    \item \textbf{Welke metriek(en) gebruik je om je YOLO-model te evalueren?} \\
+    Voor het evalueren van het YOLO-model worden verschillende evaluatiemetrieken gebruikt. De belangrijkste zijn:
+    \begin{itemize}
+        \item \textbf{Mean Average Precision (mAP)}: Dit is een samengestelde metriek die het gemiddelde neemt van de Average Precision (AP) over alle objectklassen. AP is gebaseerd op de precisie-recall curve en kan worden berekend via de 11-punts of all-points interpolatiemethode. mAP wordt algemeen beschouwd als de standaardmetriek voor objectdetectie-evaluatie \autocite{Padilla2020}.
+        \item \textbf{Intersection over Union (IoU)}: Deze metriek vergelijkt de overlap tussen de voorspelde en de werkelijke bounding box. Een detectie wordt als correct beschouwd als de IoU groter is dan een vooraf ingestelde drempelwaarde (bijv. 0{,}5).
+        \item \textbf{Precision en Recall}: Precision meet het percentage juiste detecties van alle voorspellingen, terwijl recall het percentage correcte detecties meet van alle werkelijke objecten. Deze vormen samen de basis voor de precisie-recall curve, waarop AP en mAP zijn gebaseerd \autocite{Padilla2020}.
+    \end{itemize}
+
+    \item \textbf{Hoe test je je model op real-world data en zorg je voor een betrouwbare validatie?} \\
+    Om het model betrouwbaar te valideren op real-world data, worden de volgende stappen gehanteerd:
+    \begin{itemize}
+        \item \textbf{Gebruik van een representatieve testset}: De testset moet variaties in objecttypes, omgevingen, verlichting en occlusie bevatten om een reëel gebruiksscenario na te bootsen.
+        \item \textbf{Strikte scheiding van trainings-, validatie- en testdata}: Dit voorkomt overfitting en zorgt voor een eerlijke evaluatie.
+        \item \textbf{Gebruik van meerdere metrieke}: Door verschillende metrieke zoals mAP@0{,}5, mAP@0{,}75 en mAP@50:5:95 te gebruiken, kan een completer beeld worden verkregen van de prestaties van het model \autocite{Padilla2020}.
+        \item \textbf{Visuele inspectie van detecties}: Naast kwantitatieve evaluatie is het ook waardevol om bounding boxes visueel te controleren op foutieve of ontbrekende detecties.
+    \end{itemize}
 \end{itemize}
 
 
